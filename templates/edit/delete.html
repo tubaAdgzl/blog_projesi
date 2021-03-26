@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title%}Sil {{post.title}}{% endblock %}
+{% block content %}
+
+    <div class="container mt-5">
+        <div class="row">
+             <div class="col-md-6 offset-md-3 mt-3 my-5">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h5 class="mb-5">{{post.title}} yazısını silmek istediğinize emin misiniz ?</h5>
+                    <input class="btn btn-danger mb-5" type="submit" value="Sil">
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
+        <div class="container">
+            <a href="{% url 'index' %}" class="navbar-brand" style="font-size:25px;font-family: 'Noto Sans HK', sans-serif;">
+                eflat<span class="text-info">u</span>n
+            </a>
+          
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="navbarCollapse" class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                      <!--arama-->
+                    <li class="nav-item">
+                        {% if '/' == request.path %}
+                            <form class="offset-lg-1 mr-5" role="search" method="GET" action="" autocomplete="off">
+                                <input type="text" class="offset-md-1" name="q" id="search" placeholder="Arama Yap.." value="{{ request.GET.q }}">
+                            </form>
+                        {% endif %}
+                    </li>
+                    <!---->
+                    <li class="nav-item">
+                        <a href="{% url 'index' %}" class="nav-link {% if '/' == request.path%}active{% endif %}">
+                            Anasayfa
+                        </a>
+                    </li>
+                    {% if not request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a href="{% url 'login' %}" class="nav-link {% if 'login' in request.path %}active{% endif %}">
+                                Giriş Yap
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a href="{% url 'signup' %}" class="nav-link {% if 'signup' in request.path %}active{% endif %}">
+                                Kaydol
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a href="{% url 'create' %}" class="nav-link {% if 'create' in request.path %}active{% endif %}">
+                                Yazı Ekle
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a href="{% url 'logout' %}" class="nav-link {% if 'logout' in request.path %}active{% endif %}">
+                                Çıkış Yap
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+        </div>
+    </div>
+    </nav>

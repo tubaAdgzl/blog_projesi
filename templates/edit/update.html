@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title%}Güncelle{% endblock %}
+{% block content %}
+
+    <div class="container mt-5">
+        <div class="row">
+             <div class="col-md-6 offset-md-3 mt-3">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <input class="btn btn-warning" type="submit" value="Güncelle">
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

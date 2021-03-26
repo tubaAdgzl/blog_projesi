@@ -1,0 +1,15 @@
+input#search {
+    padding: 8px 8px 10px;
+    border: 0;
+    background: transparent;
+    color: #ffffff;
+    width:225px;
+    outline: 0;
+    font-size: 13px;
+    transition-duration: 0.5s;
+    transition-property: width,color;
+}
+input#search:focus{
+    border-bottom: 2px solid #696969;
+    transition-duration: 0.5s;
+}

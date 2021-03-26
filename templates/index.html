@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Blog {% endblock %}
+{% load static %}
+{% block content %}
+    <header>
+        <div class="jumbotron text-white"  style="background-image: url({% static 'bg_img.jpg' %}); background-size: 100%;">
+            <div class="container">
+                <div class="col-md-6 px-0">
+                    <h1 class="display-4 font-italic">
+                        <b>Eflatun</b>
+                    </h1>
+                    <p class="lead my-3"> 
+                       Düşünmek, ruhun kendi kendine konuşmasıdır.
+                    </p>
+                
+                </div>
+            </div>
+        </div>
+    </header>
+    <main >
+        <div class="container">
+            <div class="row">
+            {% for post in posts %}
+                <div class="col-md-12">
+                    <div class="card mb-3">
+                            <img src="{{post.image.url}}" class="card-img-top img-thumbnail">
+                        <div class="card-body">
+                                <h4 class="card-title text-center">{{post.title}}</h4>
+                                <p class="card-text">
+                                    {{post.content|truncatechars:140}}
+                                </p>
+                                <a href="{% url 'detail' post.slug %}" class="btn btn-primary">Devamını oku</a>
+                                {% if request.user == post.author %}
+                                    <a href="{% url 'update' post.slug %}" class="btn btn-warning">Güncelle</a>  
+                                    <a href="{% url 'delete' post.slug %}" class="btn btn-danger">Sil</a> 
+                                {% endif %}
+                        </div>
+                        </div>
+                        <div class="card-footer text-muted mb-5">
+                            {{post.author.get_full_name|default:post.author.username}} | {{post.date|timesince}} önce
+                        </div>
+                    </div>
+                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+{% endblock %}

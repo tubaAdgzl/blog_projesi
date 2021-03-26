@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}{{post.title}}{% endblock %}
+{% block content %} 
+    <div class="container mt-5">
+         <div class="card mb-3 mx-3 mt-5">
+                <img src="{{post.image.url}}" class="card-img-top img-thumbnail">
+            <div class="card-body">
+                    <h4 class="card-title text-center ">{{post.title}}</h4>
+                    <p class="card-text">
+                        {{post.content|linebreaks}}
+                    </p>
+            </div>
+            <div class="card-footer text-muted mb-5">
+                {{post.author.get_full_name|default:post.author.username}} | {{post.date|timesince}} önce <br><br>
+                {% if request.user == post.author %}
+                    <a href="{% url 'update' post.slug %}" class="btn btn-warning">Güncelle</a>  
+                    <a href="{% url 'delete' post.slug %}" class="btn btn-danger">Sil</a> 
+                {% endif %}
+            </div> 
+    </div>
+
+            <br><br><br><hr>
+            <!-- yorumlar -->
+            <h3>Yorumlar({{post.comments.all|length}})</h3><br>
+            {% for comment in post.comments.all %}
+                <h4>{{ comment.name }}&nbsp;<small>{{ comment.created_date|timesince}} önce</small></h4>
+                <p>{{ comment.content|linebreaks}}</p>&horbar;
+            {% endfor %}
+            <h3>Yorum Ekle : </h3>
+            {% include "comment.html" %}
+{% endblock %}
