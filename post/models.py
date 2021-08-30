@@ -9,7 +9,11 @@ class Post(models.Model):
     slug = models.SlugField(unique=True,editable=False)
     image = models.ImageField(blank=False,null=False,verbose_name="Resim")
     author = models.ForeignKey("auth.user", verbose_name="Yazar", on_delete=models.CASCADE)
-    
+    likes = models.ManyToManyField("auth.user",related_name="blog_posts")
+
+    def total_likes(self):
+        return self.likes.count()
+
     def __str__(self):
         return self.title
 
@@ -33,7 +37,7 @@ class Post(models.Model):
     class Meta:
         ordering = ["-date","id"]
 
-    
+
 class Comment(models.Model):
 
     post=models.ForeignKey("post.Post",related_name="comments",on_delete=models.CASCADE)
