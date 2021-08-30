@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}{{post.title}}{% endblock %}
-{% block content %} 
+{% block content %}
     <div class="container mt-5">
          <div class="card mb-3 mx-3 mt-5">
                 <img src="{{post.image.url}}" class="card-img-top img-thumbnail">
@@ -13,12 +13,28 @@
             <div class="card-footer text-muted mb-5">
                 {{post.author.get_full_name|default:post.author.username}} | {{post.date|timesince}} önce <br><br>
                 {% if request.user == post.author %}
-                    <a href="{% url 'update' post.slug %}" class="btn btn-warning">Güncelle</a>  
-                    <a href="{% url 'delete' post.slug %}" class="btn btn-danger">Sil</a> 
+                    <a href="{% url 'update' post.slug %}" class="btn btn-warning">Güncelle</a>
+                    <a href="{% url 'delete' post.slug %}" class="btn btn-danger">Sil</a>
                 {% endif %}
-            </div> 
+            </div>
     </div>
-
+          <!--LIKES-->
+    <div class="ml-3">
+        {% if user.is_authenticated %}
+            <form action="{% url 'like_post' post.slug %}" method="POST" novalidate>
+            {% csrf_token %}
+            {% if is_liked %}
+                <button type="submit" class="btn btn-danger"><i class="fas fa-heart"></i></button><br/>
+                {% else %}
+                 <button type="submit" class="btn btn-outline-danger"><i class="far fa-heart"></i></button><br/>
+            {% endif %}
+            {% else%}
+            <a class="btn btn-outline-info " href="{% url 'login' %}">
+                    Beğenmek için giriş yap!</a><br/>
+            </form>
+        {% endif%}
+        <strong class="text-secondary ml-3">{{total_likes}}</strong>
+    </div>
             <br><br><br><hr>
             <!-- yorumlar -->
             <h3>Yorumlar({{post.comments.all|length}})</h3><br>
