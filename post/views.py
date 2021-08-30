@@ -1,17 +1,19 @@
 from django.shortcuts import render,HttpResponse,get_object_or_404
+from django.http import HttpResponseRedirect
 from django.views.generic import ListView,DetailView,CreateView
 from django.views.generic import UpdateView,DeleteView
 from .models import Post
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,reverse
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from .forms import CommentForm
 
 def post_index(request):
-    posts = Post.objects.all()
+    post_list = Post.objects.all()
     query = request.GET.get("q")
     if query:
-        posts = posts.filter(
+        post_list = post_list.filter(
             Q(title__icontains=query)|
             Q(content__icontains=query)|
             Q(author__first_name__icontains=query)|
@@ -19,7 +21,18 @@ def post_index(request):
             Q(author__username__icontains=query)
             ).distinct()
 
+    paginator = Paginator(post_list,3)
+
+    page = request.GET.get('sayfa')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+
     return render(request,"index.html",{"posts":posts})
+
 
 def post_detail(request,slug):
     post = get_object_or_404(Post, slug=slug)
@@ -30,11 +43,29 @@ def post_detail(request,slug):
         comment.post = post
         comment.save()
 
-    context = {
-        "post": post,
-        "form":form,
-    }
+    context = dict()
+    likes_connected = get_object_or_404(Post, slug=slug)
+    liked = False
+
+    if likes_connected.likes.filter(id=request.user.id).exists():
+        liked = True
+    total_likes = likes_connected.total_likes()
+    context["total_likes"] = total_likes
+    context["is_liked"]=liked
+    context["form"]=form
+    context["post"]=post
+
     return render(request,"detail.html",context)
+
+def post_like(request,slug):
+    post = get_object_or_404(Post, slug=slug)
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+
+    else:
+        post.likes.add(request.user)
+       
+    return HttpResponseRedirect(reverse('detail',args=[slug]))
 
 class PostCreateView(CreateView):
     model = Post
