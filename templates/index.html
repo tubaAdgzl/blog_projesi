@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Blog {% endblock %}
+{% block title %}Eflatun Blog{% endblock %}
 {% load static %}
 {% block content %}
     <header>
@@ -7,12 +7,12 @@
             <div class="container">
                 <div class="col-md-6 px-0">
                     <h1 class="display-4 font-italic">
-                        <b>Eflatun</b>
+                        <b>eflatun</b>
                     </h1>
-                    <p class="lead my-3"> 
+                    <p class="lead my-3">
                        Düşünmek, ruhun kendi kendine konuşmasıdır.
                     </p>
-                
+
                 </div>
             </div>
         </div>
@@ -31,8 +31,8 @@
                                 </p>
                                 <a href="{% url 'detail' post.slug %}" class="btn btn-primary">Devamını oku</a>
                                 {% if request.user == post.author %}
-                                    <a href="{% url 'update' post.slug %}" class="btn btn-warning">Güncelle</a>  
-                                    <a href="{% url 'delete' post.slug %}" class="btn btn-danger">Sil</a> 
+                                    <a href="{% url 'update' post.slug %}" class="btn btn-warning">Güncelle</a>
+                                    <a href="{% url 'delete' post.slug %}" class="btn btn-danger">Sil</a>
                                 {% endif %}
                         </div>
                         </div>
@@ -41,6 +41,28 @@
                         </div>
                     </div>
                 {% endfor %}
+                  <!--pagination-->
+                <div class="clearfix mb-5 ml-4">
+                    {% if posts.number == 1 and posts.has_next %}
+                        <a class="btn btn-outline-info float-right" href="?sayfa=2">&rangle;</a>
+                        <a class="btn btn-outline-info" href="?sayfa={{posts.paginator.num_pages}}">&raquo;</a>&nbsp;
+                    {% endif %}
+
+                    {% if posts.has_previous %}
+                        <a class="btn btn-outline-info" href="/">&laquo;</a>
+                        <a class="btn btn-outline-info" href="?sayfa={{ posts.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&langle;</a>
+                    {% endif %}
+                    {% for num in posts.paginator.page_range %}
+                        {% if posts.number == num and posts.number != 1 %}
+                            <a class="btn btn-outline-info" href="?sayfa={{num}}">{{num}}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if posts.has_next and posts.number != 1 %}
+                         <a class="btn btn-outline-info" href="?sayfa={{ posts.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&rangle;</a>
+                          <a class="btn btn-outline-info" href="?sayfa={{posts.paginator.num_pages}}">&raquo;</a>
+                    {% endif %}
+                    </div>
                             </div>
                         </div>
                     </div>
