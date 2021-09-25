@@ -18,6 +18,7 @@
         </div>
     </header>
     <main >
+       {% if posts %}
         <div class="container">
             <div class="row">
             {% for post in posts %}
@@ -41,6 +42,13 @@
                         </div>
                     </div>
                 {% endfor %}
+            {% else %}
+                 <div class="container">
+                     <div class="alert alert-danger">
+                          İÇERİK BULUNAMADI!
+                     </div>
+                  </div>
+            {% endif %}
                   <!--pagination-->
                 <div class="clearfix mb-5 ml-4">
                     {% if posts.number == 1 and posts.has_next %}
