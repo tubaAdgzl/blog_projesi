@@ -11,11 +11,11 @@
                 <ul class="navbar-nav ml-auto">
                       <!--arama-->
                     <li class="nav-item">
-                        {% if '/' == request.path %}
-                            <form class="offset-lg-1 mr-5" role="search" method="GET" action="" autocomplete="off">
-                                <input type="text" class="offset-md-1" name="q" id="search" placeholder="Arama Yap.." value="{{ request.GET.q }}">
-                            </form>
-                        {% endif %}
+                       
+                        <form class="offset-lg-1 mr-5" role="search" method="GET" action="/" autocomplete="off">
+                              <input type="text" class="offset-md-1" name="q" id="search" placeholder="Arama Yap.." value="{{ request.GET.q }}">
+                        </form>
+        
                     </li>
                     <!---->
                     <li class="nav-item">
